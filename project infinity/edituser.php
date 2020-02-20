@@ -1,30 +1,37 @@
 <?php
 session_start();
 require 'config.php';
-$show_modal=false;
+//$uname = ($_SESSION['username']);
+//$pd = ($_SESSION['pass']);
+$uname ='cse180001026';
+$pd='12345';
+
+$query = $con->prepare('select email_id, name,password, contact, office from user where user.user_id = ? and user.password = ?');
+$query->execute(array($uname,$pd));
+$row = $query->fetch(PDO::FETCH_ASSOC);
+
 if(isset($_POST['but_submit'])){
-$a = $_POST['user_id'];
-$b = $_POST['username'];
-$c =$_POST['email'];
-$d = $_POST['office'];
-$e=$_POST['contact'];
-$f = $_POST['fund'];
-$g= $_POST['pass'];
-$h= date("Y-m-d");
+    $a = $_POST['mail_id'];
+    $b = $_POST['username'];
+    $d = $_POST['office'];
+    $e=$_POST['contact'];
+    $g= $_POST['pass'];
 
-$sql="INSERT INTO `user`(`user_id`, `email_id`, `name`, `password`, `contact`, `office`, `add_date`, `left_balance`) VALUES (:a,:c,:b,:g,:e,:d,:h,:f)"; 
-$result=$con->prepare($sql);
-$row=$result->execute(array(":a"=>$a,":c"=>$c,":b"=>$b,":g"=>$g,":e"=>$e,":d"=>$d,":h"=>$h,":f"=>$f));
- if($row) 
- {  $show_modal=true;
- }
- else
- {
-  echo '<script> alert ("Error Adding New User!!"); window.history.back();</script>'; 
- }
+$sql1 = 'update user set 
+       email_id =:a , 
+       name = :b, 
+       office = :d, 
+       contact = :e, 
+       password = :g
+  where user_id=:h and password= :i';
+$statement = $con->prepare($sql1);
+$statement->execute(array(":a"=>$a,":b"=>$b,":g"=>$g,":e"=>$e,":d"=>$d,":h"=>$uname,":i"=>$pd));
+$result = $statement->fetch(PDO::FETCH_ASSOC);
 
+$query = $con->prepare('select email_id, name,password, contact, office from user where user.user_id = ? and user.password = ?');
+$query->execute(array($uname,$pd));
+$row = $query->fetch(PDO::FETCH_ASSOC);
 }
-//session_destroy();
 ?>
 <html>
     <head>
@@ -44,37 +51,39 @@ $row=$result->execute(array(":a"=>$a,":c"=>$c,":b"=>$b,":g"=>$g,":e"=>$e,":d"=>$
           <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
               <div class="card-body">
-                <h5 class="card-title text-center g3">Create New User</h5>
+                <h5 class="card-title text-center g3">Edit User Details</h5>
                 <form action="" method = "post" class="form-signin">
-                  <div class="form-label-group">
-                    <input name="user_id" class="form-control" placeholder="User Id" required autofocus>
-                    <label for="username">User Id</label>
-                  </div>
-                  <div class="form-label-group">
-                    <input name="username" class="form-control" placeholder="Name" required autofocus>
-                    <label for="username">Name</label>
-                  </div>
-                  <div class="form-label-group">
-                    <input name="email" class="form-control" placeholder="Email address" required autofocus>
+                <div class="form-label-group">
+                    <?php
+                    echo '<input  name="mail_id" value="'.$row['email_id'].'" class="form-control" placeholder="Name" Required>';
+                    ?>
                     <label for="inputEmail">Email Id</label>
                   </div>
                   <div class="form-label-group">
-                    <input  name="office"  class="form-control" placeholder="Office Address" required>
+                    <?php
+                    echo '<input type= "text" name="username" value="'.$row['name'].'" class="form-control" placeholder="Name" Required>';
+                    ?>
+                    <label for="username">Name</label>
+                  </div>
+                  <div class="form-label-group">
+                    <?php
+                    echo '<input name="office" value="'.$row['office'].'" class="form-control" placeholder="Office" Required>';
+                    ?>
                     <label for="inputOffice">Office Address</label>
                   </div>
                   <div class="form-label-group">
-                    <input name="contact"  class="form-control" placeholder="Contact Number" required>
-                    <label for="inputPassword">Contact Number</label>
+                  <?php
+                    echo '<input name="contact" value="'.$row['contact'].'" class="form-control" placeholder="Name" Required>';
+                    ?>
+                    <label for="inputContact">Contact Number</label>
                   </div>
                   <div class="form-label-group">
-                    <input name="fund" class="form-control" placeholder="Initial Funding" required>
-                    <label for="inputFunding">Initial Funding</label>
-                  </div>
-                  <div class="form-label-group">
-                    <input type="password" name="pass" class="form-control" placeholder="Password" required>
+                  <?php
+                    echo '<input name="pass" value="'.$row['password'].'" class="form-control" placeholder="Name" Required>';
+                    ?>
                     <label for="inputPassword">Password</label>
                   </div>
-                  <button class="btn btn-lg btn-primary btn-block text-uppercase"  id="lgin"  name ='but_submit' type="submit">Submit</button>
+                  <button class="btn btn-lg btn-primary btn-block text-uppercase"  id="lgin"  name ='but_submit' type="submit">Save Changes</button>
              </form>
               </div>
             </div>
@@ -98,8 +107,6 @@ $row=$result->execute(array(":a"=>$a,":c"=>$c,":b"=>$b,":g"=>$g,":e"=>$e,":d"=>$
             </div>
           </div>
         </div>
-      <?php if($show_modal):?>
-          <script> $('#myModal').modal('show');</script>
-      <?php endif;?>
+     
     </body>
 </html>
