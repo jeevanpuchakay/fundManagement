@@ -12,6 +12,8 @@
     $add_date = "";
     $left_balance = "";
     $tr_type = "";
+    $email="";
+    $nameUser="";
     if(isset($_POST['search_by_userID'])){
         $var = $_POST['search_by_userID'];
         $query = $con->prepare('select * from user where user_id = ?');
@@ -26,12 +28,13 @@
             $add_date = $row['add_date'];
             $left_balance = $row['left_balance'];
             $_SESSION['new_var'] = $user_id;
+            $_SESSION['email'] = $email_id;
+            $_SESSION['name'] = $name;
         }
         else{
-            echo '<script> alert ("user does not EXIST"); window.history.back();</script>';
+            echo '<script> alert ("User does not EXIST"); window.history.back();</script>';
         }
     }
-    $userEmail="";
     if(isset($_POST['search_by_emailID'])){
         $var1 = $_POST['search_by_emailID'];
         $query = $con->prepare('select *from user where email_id = ?');
@@ -42,20 +45,27 @@
             $user_id = $row['user_id'];
             $name= $row['name'];
             $email_id = $row['email_id'];
-            $userEmail=$email_id;
             $contact = $row['contact'];
             $office = $row['office'];
             $add_date = $row['add_date'];
             $left_balance = $row['left_balance'];
             $_SESSION['new_var'] = $user_id;
+            $_SESSION['email'] = $email_id;
+            $_SESSION['name'] = $name;
         }
         else{
             echo '<script> alert ("user does not EXIST"); window.history.back();</script>';
         }
     }
+
+    $email="";
+    $nameUser="";
     $user_id = "";
     $user_id= $_SESSION['new_var'];
+    $email= $_SESSION['email'];
+    $nameUser=$_SESSION['name'];
     if(isset($_POST['tr-btn'])){
+        
         $tr_type = "";
         $tr_type = $_POST['tr_type'];
         $amount = $_POST['amount'];
@@ -75,54 +85,8 @@
             $sql = $con->prepare('insert into balance values(:user_id,:trans_id)');
             $sql->execute($data);
             $_SESSION['new_var'] = "";
-            $bool = true;
-
-
-            if($bool){
-
-
-                
-
-            $mail = new PHPMailer;
-            
-            //$mail->SMTPDebug = 3;                               // Enable verbose debug output
-            
-            $mail->isSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
-            $mail->SMTPAuth = true;                               // Enable SMTP authentication
-            $mail->Username = 'gkrjeevan37@gmail.com';                 // SMTP username
-            $mail->Password = 'dummypassword123';                           // SMTP password
-            $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-            $mail->Port = 587;                                    // TCP port to connect to
-            $userEmail="cse180001022@iiti.ac.in";echo "lol";
-            $mail->setFrom('gkrjeevan37@gmail.com', 'Mailer');
-            $mail->addAddress($userEmail,$name);     // Add a recipient
-            //$mail->addAddress('ellen@example.com');               // Name is optional
-            //$mail->addReplyTo('info@example.com', 'Information');
-            //$mail->addCC('cc@example.com');
-            //$mail->addBCC('bcc@example.com');
-            
-            //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-            $mail->isHTML(true);                                  // Set email format to HTML
-
-            $Content="Your account has been credited "+$amount;
-
-
-            $mail->Subject = 'Transaction alert';
-            $mail->Body    = $Content;
-            //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-            
-            if(!$mail->send()) {
-                echo 'Message could not be sent.';
-                echo 'Mailer Error: ' . $mail->ErrorInfo;
-            } else {
-                echo 'Message has been sent';
-            }
-
-
-            }
-
+            $bool = true; 
+            $type="Credited";
 
         }
         else{
@@ -143,9 +107,52 @@
             $sql->execute($data);
             $_SESSION['new_var'] = "";
             $bool = true;
+            $type="Debited";
+
         }
+
+        
+        if($bool){
+
+            $query = $con->prepare('select left_balance from user where user_id = ?');
+            $query->execute(array($user_id));
+            $row = $query->fetch(PDO::FETCH_ASSOC);
+            $left=$row['left_balance'];
+            $mail = new PHPMailer;
+            //$mail->SMTPDebug = 3;                               // Enable verbose debug output
+            $mail->isSMTP();                                      // Set mailer to use SMTP
+            $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+            $mail->SMTPAuth = true;                               // Enable SMTP authentication
+            $mail->Username = 'gkrjeevan37@gmail.com';                 // SMTP username
+            $mail->Password = 'dummypassword123';                           // SMTP password
+            $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = 587;                                    // TCP port to connect to
+            $userEmail="cse180001022@iiti.ac.in";
+            $mail->setFrom('gkrjeevan37@gmail.com', 'Mailer');
+            
+            $mail->addAddress($email,$nameUser);     // Add a recipient
+            //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+            $mail->isHTML(true);   
+            //echo $amount;                               // Set email format to HTML
+
+            $Content="Your account has been ".$type." with Rs. ".$amount.". The Left Balance is Rs. ".$left;
+            $mail->Subject = 'Transaction alert';
+            $mail->Body   = $Content;
+            //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+            
+            if(!$mail->send()) {
+                echo 'Message could not be sent.';
+                echo 'Mailer Error: ' . $mail->ErrorInfo;
+            } else {
+                echo 'Message has been sent';
+            }
+
+
+            }
     }
 ?>
+
 <html>
     <head>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -171,19 +178,19 @@
                 <div class ="container searchBox">
                     <div class = "row">
                         <div class="col-md-auto searchText">
-                            <i class = "text-secondary searchText1" style = "font-family :-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">search by user ID</i> 
+                            <i class = "text-secondary searchText1" style = "font-family :-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">Search by User ID</i> 
                         </div>
                         <form action = "transaction.php" method="post">
                         <div class="col-md-auto  func0">
                             <input type="text" class="search-hover" name="search_by_userID" placeholder="search here...">
                         </div></form>
                         <div class="col searchText createuser">
-                            <a href="" class = "text-danger searchText1" style = "font-family :-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">create new profile</a>
+                            <a href="" class = "text-danger searchText1" style = "font-family :-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">Create New User</a>
                         </div>
                     </div>
                     <div class = "row">
                         <div class="col-md-auto searchText">
-                            <i class = "text-secondary searchText1" style = "font-family :-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">search by Email ID</i> 
+                            <i class = "text-secondary searchText1" style = "font-family :-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">Search by Email ID</i> 
                         </div>
                         <form action = "transaction.php" method="post">
                         <div class="col-md-auto">
@@ -246,7 +253,7 @@
                         <p style = 'font-size:20px'><?php echo 'Rs. '.$left_balance.'/-' ?></p> 
                     </div>
                     <div class='col-md-2' style ='text-align:right'>
-                        <p style="font-size: 20px">update balance : </p>
+                        <p style="font-size: 20px">Update Balance : </p>
                     </div>
                     <div class = 'col-md-3'>
                         <div class="input-group mb-3">
@@ -264,7 +271,7 @@
                     </div>
                     
                     <div class = 'col-md-1'>
-                        <button name = "tr-btn" class="btn btn-primary " type ="submit" onclick = "myFunction">update</button>
+                        <button name = "tr-btn" class="btn btn-primary " type ="submit" onclick = "myFunction">Update</button>
                     </div>
                 </div></form>
             </div>
