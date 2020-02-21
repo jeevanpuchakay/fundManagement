@@ -65,7 +65,6 @@
     $email= $_SESSION['email'];
     $nameUser=$_SESSION['name'];
     if(isset($_POST['tr-btn'])){
-        
         $tr_type = "";
         $tr_type = $_POST['tr_type'];
         $amount = $_POST['amount'];
@@ -127,27 +126,23 @@
             $mail->Password = 'dummypassword123';                           // SMTP password
             $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
             $mail->Port = 587;                                    // TCP port to connect to
-            $userEmail="cse180001022@iiti.ac.in";
-            $mail->setFrom('gkrjeevan37@gmail.com', 'Mailer');
-            
+            $mail->setFrom('gkrjeevan37@gmail.com', 'CSE DEPARTMENT');
             $mail->addAddress($email,$nameUser);     // Add a recipient
             //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
             //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
             $mail->isHTML(true);   
-            //echo $amount;                               // Set email format to HTML
-
-            $Content="Your account has been ".$type." with Rs. ".$amount.". The Left Balance is Rs. ".$left;
-            $mail->Subject = 'Transaction alert';
-            $mail->Body   = $Content;
-            //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-            
+            $body="<h4>This is a computer generated mail.</h4><p>Your SB A/C is ".$type." for Rs. ".$amount." /- on ".date("Y/m/d")." by Transfer.</p>Available Balance is Rs. ".$left." /-. (UPI REFERENCE NO is : ".$user_id.").<br/>KKS<br/>Something<br/>Office Address<br/>CSE DEPARTMENT <br/> Indian Institute Of Technology INDORE.";
+            $Content="Your account has been ".$type." with Rs. ".$amount." /-. The Left Balance is Rs. ".$left." /-";
+            $mail->Subject = 'Transaction Alert IITI';
+            $mail->Body   = $body;
+            $mail->AltBody=$Content;
             if(!$mail->send()) {
                 echo 'Message could not be sent.';
                 echo 'Mailer Error: ' . $mail->ErrorInfo;
-            } else {
+                } 
+            else {
                 echo 'Message has been sent';
-            }
-
+                    }
 
             }
     }
@@ -185,7 +180,7 @@
                             <input type="text" class="search-hover" name="search_by_userID" placeholder="search here...">
                         </div></form>
                         <div class="col searchText createuser">
-                            <a href="" class = "text-danger searchText1" style = "font-family :-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">Create New User</a>
+                            <a href="new_user.php" class = "text-danger searchText1" style = "font-family :-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">Create New User</a>
                         </div>
                     </div>
                     <div class = "row">
