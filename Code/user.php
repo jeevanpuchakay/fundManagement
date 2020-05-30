@@ -10,6 +10,7 @@ $row = $query->fetch(PDO::FETCH_ASSOC);
 $query1 = $con->prepare('select transactions.trans_id, type, amount, date, purpose from transactions inner join balance on transactions.trans_id = balance.trans_id where balance.user_id = ?');
 $query1->execute(array($uname));
 
+
 ?>
 <html>
     <head>
@@ -18,7 +19,7 @@ $query1->execute(array($uname));
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
       <link rel="stylesheet" href="user.css">
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+      <!--script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
         <script typr="text/javascript">
          $(function(){
                 Swal.fire({
@@ -28,12 +29,12 @@ $query1->execute(array($uname));
                     timer: 1000
                 })
          });
-        </script>
+        </script-->
     </head>
     <body>
     <div class="container-fluid c0">
         <div class="jumbotron f1">
-          <img class="img-responsive img" src="logo1.png" alt="">
+          <img class="img-responsive img" src="../assets/logo1.png" alt="">
         </div>
       <div>
         <div class="container f0">
@@ -52,8 +53,23 @@ $query1->execute(array($uname));
                     ?>
                 </div>
             </div>
+            <div class ="row">
+                <form action ="upload.php" method= "post" enctype="multipart/form-data">Select Files to Upload : 
+                <input type="file" name="fileToUpload[]" id="fileToUpload" multiple>
+                <button class="btn btn-secondary" id="fileToUpload" name ="submit" type="submit">Upload Files</button>
+                <!--input type="submit" value="Upload File" name="submit"-->
+                 <button class="btn btn-primary" name="view" type="submit">View Files</button>
+                </form>
+            </div>
             <div style="text-align:center;">
-                 <button  type="button" class="btn btn-link" onclick="myfunction()">click here to see transaction</button>
+                <div class = "row">
+			<div class = "col-sm-6" style = "text-align : right"> 
+				 <button  type="button" class="btn btn-primary" onclick="myfunction()">Past Transactions</button>	
+			</div>
+			<div class = "col-sm-6" style = "text-align : right"> 
+				 <button  type="button" class="btn btn-primary" onclick="edituser.php">Edit Details</button>	
+			</div>
+		</div>
             </div>
         </div>
         <div id = "displaytable" class="container f3">
@@ -94,5 +110,6 @@ $query1->execute(array($uname));
                 }
             }
         </script>
+        
     </body>
 </html>

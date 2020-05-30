@@ -44,7 +44,7 @@ if(isset($_POST['but_del'])){
     <body>
     <div class="container-fluid c0">
         <div class="jumbotron f1">
-          <img class="img-responsive img" src="logo1.png" alt="">
+          <img class="img-responsive img" src="../assets/logo1.png" alt="">
         </div>
     </div>
       <div class="container">

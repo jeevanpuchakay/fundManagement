@@ -25,7 +25,7 @@ section{
   color: #fff;
 }
 .search-focus {
-    background: url("search_logo.png") no-repeat left;
+    background: url("../assets/search_logo.png") no-repeat left;
     border: 1px solid #ccc;
     outline: none;
     background-size: 22px;
@@ -42,7 +42,7 @@ section{
 }
 
 .search-hover {
-    background: url("search_logo.png") no-repeat left;
+    background: url("../assets/search_logo.png") no-repeat left;
     border: 1px solid #ccc;
     outline: none;
     background-size: 22px;

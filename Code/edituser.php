@@ -1,10 +1,8 @@
 <?php
 session_start();
 require 'config.php';
-//$uname = ($_SESSION['username']);
-//$pd = ($_SESSION['pass']);
-$uname ='cse180001026';
-$pd='12345';
+$uname = ($_SESSION['username']);
+$pd = ($_SESSION['pass']);
 
 $query = $con->prepare('select email_id, name,password, contact, office from user where user.user_id = ? and user.password = ?');
 $query->execute(array($uname,$pd));
@@ -43,7 +41,7 @@ $row = $query->fetch(PDO::FETCH_ASSOC);
     <body>
     <div class="container-fluid c0">
         <div class="jumbotron f1">
-          <img class="img-responsive img" src="logo1.png" alt="">
+          <img class="img-responsive img" src="../assets/logo1.png" alt="">
         </div>
       <div>
       <div class="container">

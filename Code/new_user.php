@@ -16,7 +16,8 @@ $sql="INSERT INTO `user`(`user_id`, `email_id`, `name`, `password`, `contact`, `
 $result=$con->prepare($sql);
 $row=$result->execute(array(":a"=>$a,":c"=>$c,":b"=>$b,":g"=>$g,":e"=>$e,":d"=>$d,":h"=>$h,":f"=>$f));
  if($row) 
- {  $show_modal=true;
+ { mkdir("uploads/".$a); // To make a directory for uploading this particular user's files 
+  $show_modal=true;
  }
  else
  {
@@ -36,7 +37,7 @@ $row=$result->execute(array(":a"=>$a,":c"=>$c,":b"=>$b,":g"=>$g,":e"=>$e,":d"=>$
     <body>
     <div class="container-fluid c0">
         <div class="jumbotron f1">
-          <img class="img-responsive img" src="logo1.png" alt="">
+          <img class="img-responsive img" src="../assets/logo1.png" alt="">
         </div>
       <div>
       <div class="container">

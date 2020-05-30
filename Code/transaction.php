@@ -78,7 +78,7 @@
             $id1 = 0;
             $id1 = $id['m'];
             $data = ['trans_id' => $id1+1, 'credit' => "Credit", 'amount' => $amount];
-            $sql = $con->prepare('insert into transactions(trans_id, type, amount, date) values (:trans_id,:credit,:amount,NOW())');
+            $sql = $con->prepare('insert into transactions(trans_id, type, amount, date,purpose) values (:trans_id,:credit,:amount,NOW())');
             $sql->execute($data);
             $data = ['trans_id' => $id1+1, 'user_id' => $user_id];
             $sql = $con->prepare('insert into balance values(:user_id,:trans_id)');
@@ -133,7 +133,7 @@
             $mail->isHTML(true);   
             $body="<h4>This is a computer generated mail.</h4><p>Your SB A/C is ".$type." for Rs. ".$amount." /- on ".date("Y/m/d")." by Transfer.</p>Available Balance is Rs. ".$left." /-. (UPI REFERENCE NO is : ".$user_id.").<br/>KKS<br/>Something<br/>Office Address<br/>CSE DEPARTMENT <br/> Indian Institute Of Technology INDORE.";
             $Content="Your account has been ".$type." with Rs. ".$amount." /-. The Left Balance is Rs. ".$left." /-";
-            $mail->Subject = 'Transaction Alert IITI';
+            $mail->Subject = 'Notification for Fund Credit/Debit';
             $mail->Body   = $body;
             $mail->AltBody=$Content;
             if(!$mail->send()) {
@@ -160,7 +160,7 @@
     <body>
         <div class="container-fluid c0">
             <div class="jumbotron f1">
-            <img class="img-responsive img" src="logo1.png" alt="">
+            <img class="img-responsive img" src="../assets/logo1.png" alt="">
             </div>
         <div>
         <div class = "container main">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3307
--- Generation Time: Jan 25, 2020 at 10:43 AM
+-- Generation Time: Feb 26, 2020 at 10:04 AM
 -- Server version: 8.0.18
 -- PHP Version: 7.3.12
 
@@ -54,9 +54,32 @@ INSERT INTO `admin` (`admin_id`, `name`, `password`, `contact`, `office`) VALUES
 DROP TABLE IF EXISTS `balance`;
 CREATE TABLE IF NOT EXISTS `balance` (
   `user_id` varchar(30) NOT NULL,
-  `trans_id` varchar(30) NOT NULL,
+  `trans_id` int(30) NOT NULL,
   PRIMARY KEY (`user_id`,`trans_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `balance`
+--
+
+INSERT INTO `balance` (`user_id`, `trans_id`) VALUES
+('', 20),
+('', 21),
+('jay@hotmail.com', 1),
+('jay@hotmail.com', 2),
+('jay@hotmail.com', 3),
+('jay@hotmail.com', 4),
+('jay@hotmail.com', 5),
+('jay@hotmail.com', 6),
+('jay@hotmail.com', 7),
+('jay@hotmail.com', 8),
+('jay@hotmail.com', 9),
+('jay@hotmail.com', 10),
+('jay@hotmail.com', 11),
+('jay@hotmail.com', 12),
+('jay@hotmail.com', 17),
+('jay@hotmail.com', 18),
+('jay@hotmail.com', 19);
 
 -- --------------------------------------------------------
 
@@ -66,13 +89,40 @@ CREATE TABLE IF NOT EXISTS `balance` (
 
 DROP TABLE IF EXISTS `transactions`;
 CREATE TABLE IF NOT EXISTS `transactions` (
-  `trans_id` varchar(30) NOT NULL,
-  `type` varchar(1) NOT NULL,
+  `trans_id` int(30) NOT NULL,
+  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `amount` int(15) NOT NULL,
   `date` date NOT NULL,
-  `purpose` varchar(50) NOT NULL,
   PRIMARY KEY (`trans_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`trans_id`, `type`, `amount`, `date`) VALUES
+(0, 'c', 0, '2020-02-07'),
+(1, 'Debit', 190000, '2020-02-07'),
+(2, 'Credit', 93, '2020-02-07'),
+(3, 'Credit', 500, '2020-02-07'),
+(4, 'Credit', 12, '2020-02-07'),
+(5, 'Credit', 500, '2020-02-07'),
+(6, 'Credit', 500, '2020-02-07'),
+(7, 'Credit', 500, '2020-02-08'),
+(8, 'Credit', 12, '2020-02-08'),
+(9, 'Credit', 12, '2020-02-08'),
+(10, 'Credit', 12, '2020-02-08'),
+(15, 'Debit', 500, '2020-02-11'),
+(14, 'Debit', 500, '2020-02-11'),
+(13, 'Debit', 500, '2020-02-11'),
+(12, 'Debit', 500, '2020-02-11'),
+(11, 'Debit', 500, '2020-02-11'),
+(21, 'Debit', 500, '2020-02-11'),
+(20, 'Debit', 500, '2020-02-11'),
+(19, 'Debit', 500, '2020-02-11'),
+(18, 'Credit', 500, '2020-02-11'),
+(17, 'Credit', 500, '2020-02-11'),
+(16, 'Debit', 500, '2020-02-11');
 
 -- --------------------------------------------------------
 
@@ -83,6 +133,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `user_id` varchar(30) NOT NULL,
+  `email_id` varchar(30) NOT NULL,
   `name` varchar(20) NOT NULL,
   `password` varchar(20) NOT NULL,
   `contact` varchar(10) NOT NULL,
@@ -96,9 +147,11 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `name`, `password`, `contact`, `office`, `add_date`, `left_balance`) VALUES
-('jay@hotmail.com', 'Jay', '12345', '6378516182', 'Pod 1A-411', '2020-01-25', 150000),
-('uday@yahoo.com', 'Uday', '123456', '9969822578', 'Pod 1A-412', '2020-01-26', 15000000);
+INSERT INTO `user` (`user_id`, `email_id`, `name`, `password`, `contact`, `office`, `add_date`, `left_balance`) VALUES
+('jay@hotmail.com', 'email@jay', 'Jay', '12345', '99999999', 'Pod 1A-411', '2020-01-25', 10000),
+('uday@yahoo.com', '', 'Uday', '123456', '9969822578', 'Pod 1A-412', '2020-01-26', 400),
+('cse180001027', 'user@user123', 'user123', '1234567', '9934984456', 'IITINDORE', '2020-02-03', 14000),
+('user@user1', 'cse18000@user', 'user123', '12345', '9934984456', 'iit', '2020-02-03', 1300);
 
 -- --------------------------------------------------------
 
