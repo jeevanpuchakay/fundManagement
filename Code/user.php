@@ -29,12 +29,44 @@ if(isset($_POST["logout"]))
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
       <link rel="stylesheet" href="user.css">
+      <link rel="stylesheet" href="admin.css">
+      <script src="https://kit.fontawesome.com/c4b975f7fd.js" crossorigin="anonymous"></script>
     </head>
     <body>
+    <div class="grid-container">
+  <div class="grid-item item1"><p><img src="./assets/logo.png" /></p></div>
+  <div class="grid-item item2"><h1>FUND MANAGEMENT SYSTEM</h1></div>
+  <div class="grid-item item3"><h1>CSE Department</h1><p>User Page</p></div>  
+</div>
+<div class="wrapper">
+    <div class="sidebar">
+        <h2 class="new_h1">Logged In As <p><?php echo $row["name"]?></p></h2>
+        <ul>
+            <li><a href="user.php"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="edituser.php"><i class="far fa-file-alt"></i> Edit Details</a></li>
+            <li>
+            <form id = "my_form" action="view.php" method= "post">
+            <a name  =  "view" href="javascript:{}" onclick="document.getElementById('my_form').submit();"><i class = "fas fa-file-alt"></i>View Document</a>
+            <input type  ="hidden"  name = "view" value = "javascript:{}" />  
+            </form>
+            </li>
+            <li>
+            <form id = "my_form" action="user.php" method= "post">
+            <a name  =  "view" href="javascript:{}" onclick="myfunction()"><i class="fas fa-file-invoice-dollar"></i>Past Transactions</a>
+            <input type  ="hidden"  name = "view" value = "javascript:{}" />  
+            </form>
+            <li>
+            <form id = "my_form1" action="user.php" method= "post">
+            <a name  =  "logout" href="javascript:{}" onclick="document.getElementById('my_form1').submit();"><i class = "fas fa-sign-out-alt"></i>Log Out</a>
+            <input type  ="hidden"  name = "logout" value = "javascript:{}" />
+            </form>
+            </li>
+        </ul> 
+      </div>
+    </div>
+</div>
+
     <div class="container-fluid c0">
-        <div class="jumbotron f1">
-          <img class="img-responsive img" src="./assets/logo1.png" alt="">
-        </div>
       <div>
         <div class="container f0">
             <div class = "jumbotron bg-light cc1">
@@ -53,26 +85,7 @@ if(isset($_POST["logout"]))
                     ?>
                 </div>
             </div>
-            <div class ="row" style="text-align: center;">
-                <form action ="view.php" method= "post" enctype="multipart/form-data">
-                <!--input type="file" name="fileToUpload[]" id="fileToUpload" multiple-->
-                <!--button class="btn btn-secondary mt-3" id="fileToUpload" name ="submit" type="submit">Upload Files</button-->
-                <!--input type="submit" value="Upload File" name="submit"-->
-                
-                 <button class="btn btn-primary mt-3" name="view" type="submit">View Document</button>
-                </form>
-            </div>
-            <div style="text-align:center;">
-                <div class = "row">
-			<div class = "col-sm-6 mb-1" style = "text-align : right"> 
-				 <button  type="button" class="btn btn-primary" onclick="myfunction()">Past Transactions</button>	
-			</div>
-			<div class = "col-sm-6 mb-1" style = "text-align : left"> 
-				 <button  type="button" class="btn btn-primary" onclick="location.href = 'edituser.php';">Edit Details</button>	
-			</div>
-		</div>
-            </div>
-        </div>
+            
         <div id = "displaytable" class="container f3">
         <table class="table table-hover">
             <thead>
@@ -113,12 +126,5 @@ if(isset($_POST["logout"]))
                 }
             }
         </script>
-        <footer>
-        <form action="user.php" method="post">
-            <div class="copyright mb-1 mr-5" style="text-align: right;">
-                <button class="btn btn-danger" name = "logout">Logout</button>
-            </div>
-        </form>
-        </footer>
     </body>
 </html>

@@ -143,7 +143,7 @@ if(isset($_POST['but_submit']))
                   </div>
                   <div class="form-label-group">
                     <input type="tel" name="contact"  class="form-control" placeholder="Contact Number" pattern="[0-9]{10}" required>
-                    <p style="text-align:center;font-size:0.8vw">Contact Number Format: 9876543210</p>
+                    <p style="text-align:center;font-size:0.8vw">Contact number must contain 10 digits</p>
                     <label for="inputContact">Contact Number</label>
                   </div>
                   <div class="form-label-group">

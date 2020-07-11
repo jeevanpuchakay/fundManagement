@@ -62,7 +62,7 @@
         $amount = $_POST['amount'];
         $user = $_POST['new_user_id'];
         $email = $_POST['new_email_id'];
-        if($tr_type == "Credit" && $user != ''){
+        if($tr_type == "Add Fund" && $user != ''){
             $data = ['user_id' => $user, 'amount' => $amount];
             $sql = $con->prepare('update user set left_balance = left_balance + :amount where user_id=:user_id');
             $status = $sql->execute($data);
@@ -83,7 +83,7 @@
             $type="Credited";
             
         }
-        else if ($tr_type == "Debit" && $user != ''){
+        else if ($tr_type == "Withdraw fund" && $user != ''){
             $sql = $con->prepare('select left_balance from user where user_id= ?') ;
             $sql->execute(array($user));
             $loc = $sql->fetch(PDO::FETCH_ASSOC);
@@ -270,8 +270,8 @@
                     </div>
                     <div class= 'col-md-2' style= 'padding-top:0.0%; padding-left:2%'>
                         <select class="form-control" name="tr_type">
-                            <option>Credit</option>
-                            <option>Debit</option>
+                            <option>Add Fund</option>
+                            <option>Withdraw fund</option>
                         </select>
                     </div>
                     

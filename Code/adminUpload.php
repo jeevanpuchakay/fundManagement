@@ -53,15 +53,46 @@ if(isset($_POST["view"])){
     $dis=true;
 }
 ?>
-<html>
-    <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-      <!--link rel="stylesheet" href="user.css"-->
-    </head>
-    <body>
+    <html>
+        <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="admin.css">
+        </head>
+        <body>
+    <div class="grid-container">
+  <div class="grid-item item1"><p><img src="./assets/logo.png" style = "max-width : 100%; " /></p></div>
+  <div class="grid-item item2"><h1>FUND MANAGEMENT SYSTEM</h1></div>
+  <div class="grid-item item3"><h1>CSE Department</h1><p>Admin Page</p></div>  
+</div>
+<div class="wrapper padding-top : 100px">
+    <div class="sidebar">
+        <h2 class="new_h1">Logged In As <p><?php echo $_SESSION["admin"]?></p></h2>
+        <ul>
+            <li><a href="admin.php"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="new_user.php"><i class="fas fa-user-plus"></i>Create User</a></li>
+			<li><a href="del_user.php"><i class="fas fa-address-book"></i>Delete User</a></li>
+            <li><a href="access.php?request=user"><i class="far fa-file-alt"></i> Access User Records</a></li>
+            <li>
+            <form id = "my_form" action="adminUpload.php" method= "post">
+            <a name  =  "view" href="javascript:{}" onclick="document.getElementById('my_form').submit();"><i class = "fas fa-file-alt"></i>View Document</a>
+            <input type  ="hidden"  name = "view" value = "javascript:{}" />  
+            </form>
+            </li>
+            <li><a href="transaction.php"><i class="fas fa-file-invoice-dollar"></i>Update Fund</a></li>
+            <li><a href="access.php?request=transaction"><i class="fas fa-file-invoice-dollar"></i>Transactions log</a></li>
+            <li>
+            <form id = "my_form1" action="admin.php" method= "post">
+            <a name  =  "logout" href="javascript:{}" onclick="document.getElementById('my_form1').submit();"><i class = "fas fa-sign-out-alt"></i>Log Out</a>
+            <input type  ="hidden"  name = "logout" value = "javascript:{}" />
+            </form>
+            </li>
+        </ul> 
+      </div>
+    </div>
+</div>
         <div id=displaytable class="container f3">
         <table class="table table-hover">
             <thead>
@@ -117,3 +148,4 @@ if(isset($_POST["view"])){
                 ?>
             </tbody>
     </body>
+    

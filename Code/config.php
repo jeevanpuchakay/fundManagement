@@ -1,3 +1,8 @@
+<hmtl>
+  <head>
+  <script src="https://kit.fontawesome.com/c4b975f7fd.js" crossorigin="anonymous"></script>
+  </head>
+</hmtl>
 <?php 
 $dsn = "mysql:host=localhost;port=3307;dbname=fund";
 
