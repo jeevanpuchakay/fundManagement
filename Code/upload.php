@@ -6,7 +6,7 @@ session_start();
 //unable to upload file of size >10MB
 // 3rd april
 require 'config.php';
-$uID = ($_SESSION['username']);
+$uID = ($_SESSION['usern']);
 $allowed=array('pdf','txt','png'); //File types
 $target_dir="../uploads/".$uID."/"; //Target Directory for a specific user
 if(isset($_POST["submit"])){
@@ -46,35 +46,15 @@ else {
 
 
 if(isset($_POST["view"])){
-$target_dir="uploads/".$uID."/";
+$target_dir="../uploads/".$uID."/";
 if ($handle = opendir($target_dir)) {
     while (false !== ($entry = readdir($handle))) {
         if ($entry != "." && $entry != "..") {
-            echo "<a href='download.php?file=".$entry."'>".$entry."</a></br>";
+			$lin="<a href='download.php?file=".$entry." & userid=".$uID."'>".$entry."</a></br>";
+			echo $lin;
     	    }
     	}
     	closedir($handle);
 	}
 }
-// Fisrt Try (For Uploading a single File)
-/*$target_file=$target_dir.basename($_FILES["fileToUpload"]["name"]); //File Name
-$allowed=array('pdf','txt','png'); //File types
-$uploadOK=1;
-$fileType=strtolower((pathinfo($target_file,PATHINFO_EXTENSION))); //Getting the file Extension  and converting to lower alphabets
-
-if(isset($_POST["submit"])){
-	if(!in_array($fileType,$allowed)){echo "Wrong File Type"; $uploadOK=0;} // Checking is the file type is correct or not	
-	}
-if(file_exists($target_file)){echo "Sorry! File Already Exists. " ;  // To Check If the file Already  Exists
-								$uploadOK=0;}
-if($_FILES["fileToUpload"]["size"]>1000000){echo "Sorry! File Size too Large. " ;  // To Check If the file size >1000 KB
-								$uploadOK=0;}
-if($uploadOK==0){echo "Sorry Your File Was not Uploaded. ";}
-
-else{ if(move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)){
-					echo "The File ".basename($_FILES["fileToUpload"]["name"])." has been Uploaded. ";}
-	
-else {echo "Error in Uploadin File.";}
-}
-*/
 ?>

@@ -41,17 +41,47 @@ if(isset($_POST['but_del'])){
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
       <link rel="stylesheet" href="del_user.css">
-    <body>
-    <div class="container-fluid c0">
-        <div class="jumbotron f1">
-          <img class="img-responsive img" src="../assets/logo1.png" alt="">
-        </div>
+      <link rel="stylesheet" href="admin.css">
+      <body>
+   
+    <div class="grid-container">
+  <div class="grid-item item1"><p><img src="./assets/logo.png" /></p></div>
+  <div class="grid-item item2"><h1>FUND MANAGEMENT SYSTEM</h1></div>
+  <div class="grid-item item3"><h1>CSE Department</h1><p>Admin Page</p></div>  
+</div>
+<div class="wrapper padding-top : 100px">
+    <div class="sidebar">
+        <h2 class="new_h1">Logged In As <p><?php echo $_SESSION["admin"]?></p></h2>
+        <ul>
+            <li><a href="admin.php"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="new_user.php"><i class="fas fa-user-plus"></i>Create User</a></li>
+			<li><a href="del_user.php"><i class="fas fa-address-book"></i>Delete User</a></li>
+            <li><a href="access.php?request=user"><i class="far fa-file-alt"></i> Access User Records</a></li>
+            <li>
+            <form id = "my_form" action="adminUpload.php" method= "post">
+            <a name  =  "view" href="javascript:{}" onclick="document.getElementById('my_form').submit();"><i class = "fas fa-file-alt"></i>View Document</a>
+            <input type  ="hidden"  name = "view" value = "javascript:{}" />  
+            </form>
+            </li>
+            <li><a href="transaction.php"><i class="fas fa-file-invoice-dollar"></i>Update Fund</a></li>
+            <li><a href="access.php?request=transaction"><i class="fas fa-file-invoice-dollar"></i>Transactions log</a></li>
+            <li>
+            <form id = "my_form1" action="admin.php" method= "post">
+            <a name  =  "logout" href="javascript:{}" onclick="document.getElementById('my_form1').submit();"><i class = "fas fa-sign-out-alt"></i>Log Out</a>
+            <input type  ="hidden"  name = "logout" value = "javascript:{}" />
+            </form>
+            </li>
+        </ul> 
+      </div>
     </div>
+</div>
+
       <div class="container">
         <div class="row">
           <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
               <div class="card-body">
+                <div style="text-align: right;"><a class = "text-muted" href="admin.php"> Go Back </a></div>
                 <h5 class="card-title text-center g3">Delete A User</h5>
                 <form action="" method = "post" class="form-signin">
                   <div class="form-label-group">
@@ -105,7 +135,7 @@ if(isset($_POST['but_del'])){
       <div class="container">
         <div class = "row ff1">
          <div class = "col-md-12" style="text-align: right">
-          <button class="btn btn-danger" name ="but_del" id="del">delete</button>
+          <button class="btn btn-danger" name ="but_del" id="del">Delete</button>
          </div>
       </div>
       </div>
@@ -118,6 +148,7 @@ if(isset($_POST['but_del'])){
           var y = document.getElementById("del");
           x.style.display="block";
            y.style.display="block";
+           x.style.margin = "50px"; 
       </script>    
       <?php
         }

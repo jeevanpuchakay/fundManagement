@@ -1,8 +1,6 @@
 <?php
 session_start();
-//require 'config.php'; // use config file for connection
-$dsn = "mysql:host=localhost;port=3307;dbname=fund";
-$con = new PDO($dsn,"root","");
+require 'config.php'; // use config file for connection
 $sql= $con->prepare("SELECT * FROM user");
 $sql->execute();
 $query = $con->prepare("SELECT type,amount,purpose,name,u.user_id,password,t.trans_id, date FROM transactions t inner join balance b on b.trans_id = t.trans_id inner join user u on u.user_id=b.user_id order by t.trans_id desc;"); 
@@ -14,7 +12,7 @@ $choice =substr_count($_SESSION["request"],"transaction");
 <head>
   <link rel="shortcut icon" href="assets/ico/favicon.ico">
 <script src="https://kit.fontawesome.com/c4b975f7fd.js" crossorigin="anonymous"></script>   
-
+<link rel="stylesheet" href="admin.css">
 <style>
 .grid-container {
   display: grid;
@@ -175,7 +173,7 @@ $choice =substr_count($_SESSION["request"],"transaction");
   margin-top:170px;
   margin-left:350px;
 }
-
+	
 #acs td, #acs th {
   border: 2px solid #ddd;
   padding: 10px;
@@ -193,6 +191,7 @@ $choice =substr_count($_SESSION["request"],"transaction");
   color: white;
 }
 #acs caption {
+	font-weight: bold;
 	font-size:47px;
 	font-family: Arial;
 	color:#444444;
@@ -210,36 +209,75 @@ $choice =substr_count($_SESSION["request"],"transaction");
 	color:black;
 	box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
-	
+@media screen and (max-width : 1024px){
+	#acs{
+		width : 60%;
+		margin-top: 100px;
+		margin-left: 230px;
+		
+	}
+	#acs th {
+	padding-top: 14px;
+	padding-bottom: 14px;
+	text-align: left;
+	background-color: #94a3c1;
+	color: white;
+	}
+	#acs td, #acs th {
+	border: 2px solid #ddd;
+	padding: 2px;
+	}
+	#acs td a{
+	padding: 5px 20px;
+	background-color:#94a3c1;
+	border-radius:4px;
+	margin-left:5px;
+	transition-duration:0.3s;
+	color:white
+}
+#acs caption {
+	font-size:30px;
+	font-weight: bold;
+	font-family: Arial;
+	color:#444444;
+}
+}
 </style>
 </head>
 <body>
 <div class="grid-container">
-  <div class="grid-item item1"><p><img src="../assets/logo.png" /></p></div>
-  <div class="grid-item item2"><h1><i class="fas fa-users-crown"></i>FUND MANAGEMENT SYSTEM</h1></div>
-  <div class="grid-item item3"><h1>CSE DEPARTMENT</h1><p>ADMIN PAGE</p></div>  
+  <div class="grid-item item1"><p><img src="./assets/logo.png" /></p></div>
+  <div class="grid-item item2"><h1>FUND MANAGEMENT SYSTEM</h1></div>
+  <div class="grid-item item3"><h1>CSE Department</h1><p>Admin Page</p></div>  
 </div>
 <div class="wrapper">
     <div class="sidebar">
-        <h2>BROWSE</h2>
+        <h2 class="new_h1">Logged In As <p><?php echo $_SESSION["admin"]?></p></h2>
         <ul>
             <li><a href="admin.php"><i class="fas fa-home"></i>Home</a></li>
             <li><a href="new_user.php"><i class="fas fa-user-plus"></i>Create User</a></li>
-            <!--li><a href="edituser.php"><i class="fas fa-user-edit"></i>Edit User</a></li-->
 			<li><a href="del_user.php"><i class="fas fa-address-book"></i>Delete User</a></li>
             <li><a href="access.php?request=user"><i class="far fa-file-alt"></i> Access User Records</a></li>
-            <!--li class="view"onclick="myFunction()"><i class="fas fa-address-book"></i>View User</li-->
+            <li>
+            <form id = "my_form" action="adminUpload.php" method= "post">
+            <a name  =  "view" href="javascript:{}" onclick="document.getElementById('my_form').submit();"><i class = "fas fa-file-alt"></i>View Document</a>
+            <input type  ="hidden"  name = "view" value = "javascript:{}" />  
+            </form>
+            </li>
+            <li><a href="transaction.php"><i class="fas fa-file-invoice-dollar"></i>Update Fund</a></li>
             <li><a href="access.php?request=transaction"><i class="fas fa-file-invoice-dollar"></i>Transactions log</a></li>
+            <li>
+            <form id = "my_form1" action="admin.php" method= "post">
+            <a name  =  "logout" href="javascript:{}" onclick="document.getElementById('my_form1').submit();"><i class = "fas fa-sign-out-alt"></i>Log Out</a>
+            <input type  ="hidden"  name = "logout" value = "javascript:{}" />
+            </form>
+            </li>
         </ul> 
       </div>
     </div>
-	</div>
-<div class = "id">
-<div class ="pic"><h1><i class="fas fa-id-card fa-2x"></i></h1></div>
-<div class ="det"><h1>Logged In As </h1><p><?php echo $_SESSION["admin"]?></p></div>
 </div>
 
-<table id="acs"> 
+<table id="acs" style="float : left"> 
 <?php
 if($choice <1){
 	echo'<caption>USER RECORDS</caption>

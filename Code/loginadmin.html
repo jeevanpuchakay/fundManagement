@@ -6,46 +6,14 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
       <link rel="stylesheet" href="login.css">
       <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script></script>
-      <script type="text/javascript">
-          $(document).ready(function(){
-            $(".register").click(function(){
-              $(".other").show();
-              $(".content").hide();
-              $(".register").addClass('active');
-              $(".login").removeClass('active');
-            });
-            $(".login").active(function(){
-              $(".content").show();
-              $(".other").hide();
-              $(".login").addClass('active');
-              $(".register").removeClass('active');
-            });
-          });
-        </script>
+      
     </head>
     <body>
       <div class="container-fluid c0">
         <div class="jumbotron f1">
-          <img class="img-responsive img" src="../assets/logo1.png" alt="">
+          <img class="img-responsive img" src="./assets/logo1.png" alt="">
         </div>
       <div>
-      <div class="modal fade" id="myModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-          
-            <!-- Modal Header -->
-            <div class="modal-header">
-              <h4 class="modal-title">Login Successful!!</h4>
-              <button type="button" class="close" data-dismiss="modal">×</button>
-            </div>
-            <!-- Modal footer -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="location.href = 'index.html';">Close</button>
-            </div>
-            
-          </div>
-        </div>
-      </div>
       <div class="container">
          
         <div class="row">
@@ -61,7 +29,7 @@
                 <form action="loginadmin.php" method = "post" class="form-signin">
                   <div class="form-label-group">
                     <input name="username" class="form-control" placeholder="Email address" required autofocus>
-                    <label for="inputEmail">Email Id</label>
+                    <label for="inputEmail">Admin ID</label>
                   </div>
                   <div class="form-label-group">
                     <input type="password" name ="password" class="form-control" placeholder="Password" required>

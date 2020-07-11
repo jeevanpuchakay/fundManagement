@@ -1,3 +1,4 @@
+
 .f1{
     padding-top: 2%;
     padding-left: 15%;
@@ -25,7 +26,7 @@ section{
   color: #fff;
 }
 .search-focus {
-    background: url("../assets/search_logo.png") no-repeat left;
+    background: url("search_logo.png") no-repeat left;
     border: 1px solid #ccc;
     outline: none;
     background-size: 22px;
@@ -42,7 +43,7 @@ section{
 }
 
 .search-hover {
-    background: url("../assets/search_logo.png") no-repeat left;
+    background: url("search_logo.png") no-repeat left;
     border: 1px solid #ccc;
     outline: none;
     background-size: 22px;
@@ -144,3 +145,4 @@ form {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
   }
+ 

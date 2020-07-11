@@ -1,8 +1,16 @@
 <?php
 session_start();
-//require 'config.php'; // use config file for connection
-$dsn = "mysql:host=localhost;port=3307;dbname=fund";
-$con = new PDO($dsn,"root","");
+require 'config.php'; // use config file for connection
+if(!$_SESSION['admin']){
+    echo "<script> window.location=\"loginadmin.html\"</script>";
+}
+if(isset($_POST["logout"]))
+{
+  session_destroy();
+  echo "<script>alert(\"Logged out successfully\")</script>";
+  echo "<script> window.location=\"loginadmin.html\"</script>";
+}
+
 $sql = $con->prepare("SELECT * FROM user;");
 $sql->execute();
 $xyz = '';
@@ -25,405 +33,121 @@ $ti = $t - 86400;
 $time = date("Y-m-d",$ti);
 $query = $con->prepare("SELECT type,amount,purpose,name,u.user_id,password, date FROM transactions t inner join balance b on b.trans_id = t.trans_id inner join user u on u.user_id=b.user_id WHERE t.date>=? order by t.trans_id asc;"); 
 $query->execute(array($time));
- 
+$sql_admin = $con->prepare("select * from admin where admin_id = ?");
+$sql_admin->execute(array($_SESSION['admin_id'])); 
+$row12 = $sql_admin->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <html lang="en">
-
 <head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <meta charset="utf-8">
   <title>IIT Indore Fund Management system</title>
-  <link rel="shortcut icon" href="../assets/favicon.jpeg">
+  <link rel="shortcut icon" href="./assets/favicon.jpeg">
   <script src="https://kit.fontawesome.com/c4b975f7fd.js" crossorigin="anonymous"></script>
-<style>
-.grid-container {
-  display: grid;
-  background-color: #1a242f;
-  height:90px;
-  
-}
-.id {
-  display: grid;
-  background-color: #fff;
-  height:90px;
-  float:right;
-  margin-right:20px;
-  margin-top :10px;
-  width:250px;
-  border-style:outset;
-  border-size:3px;
-  border-radius:17px;
-}
-.pic{
-	grid-coloumn:1;
-	width:60px;
-}
-.pic h1{
-	margin-top:10px;
-	padding-left:10px;
-}
-
-.det{
-	grid-column:2;
-}
-
-.det h1{
-	margin-top:12px;
-	margin-bottom:0px;
-	margin-left:0px;
-	font-size:20px;
-	font-family: 'Viaoda Libre', cursive;
-
-}
-
-.det p{
-	margin-top:0px;
-	font-family: 'Viaoda Libre', cursive;
-	font-size:22px;
-}
-
-.grid-item {
-  background-color: #1a242f;
-}
-
-.item1{
-	  grid-column: 1;
-	  
-}
-
-.item1 p{
-	padding-top : 20px;
-	padding-bottom : 0px;
-	padding-left : 4px;
-}
-.item2{
-	grid-column:2;
-	text-align:center;
-}
-.item2 h1{
-	font-size:30px;
-	 font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-	 padding-top :25px;
-	 color:#f3f5f9;
-}
-.item3{
-	grid-column:3;
-}
-.item3 h1{
-	font-size:26px;
-	 font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-	 padding-top :25px;
-	 padding-left :175px;
-	 color:#f3f5f9;
-}
-.item3 p{
-	font-size:20px;
-	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-	padding-left:175px;
-	color:#f3f5f9;
-}
-
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  list-style: none;
-  text-decoration: none;
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-}
-
-
-.wrapper{
-  display: flex;
-  position: relative;
-}
-
-.wrapper .sidebar{
-  width: 200px;
-  height: 100%;
-  background: #1a242f;
-  padding: 30px 0px;
-  position: fixed;
-}
-
-.wrapper .sidebar h2{
-  color: #fff;
-  text-transform: uppercase;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.wrapper .sidebar ul li{
-  padding: 15px;
-  border-bottom: 1px solid #bfc6d5;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-  border-top: 1px solid rgba(255,255,255,0.05);
-}    
-.view{
-	color:#bfc6d5;
-	display:block;
-	cursor:pointer;
-}
-.view .fas{
-	width:25px;
-}
-.view:hover{
-	color:#fff;
-}
-	
-.wrapper .sidebar ul li a{
-  color: #bfc6d5;
-  display: block;
-}
-
-.wrapper .sidebar ul li a .fas{
-  width: 25px;
-}
-
-.wrapper .sidebar ul li:hover{
-  background-color: #bebec0;
-}
-    
-.wrapper .sidebar ul li:hover a{
-  color: #fff;
-}
- 
-
-.button1{
-	margin-top:10px;
-	margin-left:250px;
-	display: inline-block;
-    padding: 15px 30px;
-    color: #2196f3;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    text-decoration: none;
-    font-size: 24px;
-    overflow: hidden;
-    transition: 0.2s;
-
-}
-.button2{
-	margin-top:10px;
-	margin-left:30px;
-    display: inline-block;
-    padding: 15px 30px;
-    color: #2196f3;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    text-decoration: none;
-    font-size: 24px;
-    overflow: hidden;
-    transition: 0.2s;
-}
-.button1:hover{
-  color: #255784;
-  background: #2196f3;
-  box-shadow: 0 0 10px #2196f3, 0 0 40px #2196f3, 0 0 80px #2196f3;
-  transition-delay: 0.1s;
-}
-.button2:hover{
-  color: #255784;
-  background: #2196f3;
-  box-shadow: 0 0 10px #2196f3, 0 0 40px #2196f3, 0 0 80px #2196f3;
-  transition-delay: 0.1s;
-}
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font: 16px Arial;  
-}
-
-.autocomplete {
-	position:absolute;
-	margin-top:-57px;
-	margin-left:900px;
-	background-color: #f1f3f4;
-	height: 50px;
-	border-radius: 8px;
-	width:500px;
-	display:none;
-}
-.btn{
-	width:40px;
-	height:40px;
-	border-radius:40px;
-	background-color: #f1f3f4;
-	float:right;
-	padding:0;
-	color: #4d4b4b;
-	transition: 0.1s;
-	cursor: pointer;
-	margin-top:5px;
-	margin-right:5px;
-}
-.btn:hover{
-	background-color:#cccccc;
-}
-   
-.btn i{
-	padding-left:3px;
-	padding-top:5px;
-}
-
-.search::selection {
-  color: #2ecc71;
-}	
-#myInput{
-	width:340px;
-	height:40px;
-	border:none;
-	padding-top:10px;
-	outline:none;
-	float:left;
-	background: none;
-	font-size:15px;
-	border: none;
-	color: black;
-	margin-left:10px;
-}
-
-
-.autocomplete-items {
-  position: absolute;
-  border: 1px solid #d4d4d4;
-  border-bottom: none;
-  border-top: none;
-  z-index: 99;
-  /*position the autocomplete items to be the same width as the container:*/
-  top: 100%;
-  left: 0;
-  right: 0;
-}
-
-.autocomplete-items div {
-  padding: 10px;
-  cursor: pointer;
-  background-color: #fff; 
-  border-bottom: 1px solid #d4d4d4; 
-}
-
-/*when hovering an item:*/
-.autocomplete-items div:hover {
-  background-color: #e9e9e9; 
-}
-
-/*when navigating through the items using the arrow keys:*/
-.autocomplete-active {
-  background-color: DodgerBlue !important; 
-  color: #ffffff; 
-}
-.announcements{
-	display:grid;
-	grid-template-columns:auto;
-	font-size : 18px;
-	margin-top: 110px;
-	margin-left:1270px;
-	height:460px;
-	width:400px;
-	background-color:#376ba6;
-	color:white;
-	box-shadow: 0 14px 20px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-}
-.picture{
-	height:140px;
-	padding-left:140px;
-	background-color:#376ba6;
-}
-.ball{
-	margin-top:10px;
-	height:120px;
-	width:120px;
-	border-radius:60px;
-	background-color:white;
-	color:grey;
-	padding-top:23px;
-	padding-left:37px;
-}
-.head{
-	height:20px;
-	font-family:Arial;
-	text-align:center;
-	background-color:#376ba6;
-	color:white;
-}
-.head h{
-	font-size:24px;
-}
-
-.trans{
-	background-color:#376ba6;
-  height:300px;
-  overflow:hidden;
-}
-.trans li{
-	margin-left:50px;
-	margin-top:10px;
-	margin-bottom:10px;
-}
-.trans li a{
-	color:white;
-}
-.trans li a:hover{
-	color:red;
-}
-.trans li a:focus{
-	color:skyblue;
-}
-.line{
-	margin-left: 10px;
-	margin-right: 10px;
-	border:2.5px solid white;
-}
-</style>
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
 <div class="grid-container">
-  <div class="grid-item item1"><p><img src="../assets/logo.png" /></p></div>
-  <div class="grid-item item2"><h1><i class="fas fa-users-crown"></i>FUND MANAGEMENT SYSTEM</h1></div>
-  <div class="grid-item item3"><h1>CSE DEPARTMENT</h1><p>ADMIN PAGE</p></div>  
+  <div class="grid-item item1"><p><img src="./assets/logo.png" /></p></div>
+  <div class="grid-item item2"><h1>FUND MANAGEMENT SYSTEM</h1></div>
+  <div class="grid-item item3"><h1>CSE Department</h1><p>Admin Page</p></div>  
 </div>
 <div class="wrapper">
     <div class="sidebar">
-        <h2>BROWSE</h2>
+        <h2 class="new_h1">Logged In As <p><?php echo $_SESSION["admin"]?></p></h2>
         <ul>
             <li><a href="admin.php"><i class="fas fa-home"></i>Home</a></li>
             <li><a href="new_user.php"><i class="fas fa-user-plus"></i>Create User</a></li>
-            <!--<li><a href="edituser.php"><i class="fas fa-user-edit"></i>Edit User</a></li-->
-			      <li><a href="del_user.php"><i class="fas fa-address-book"></i>Delete User</a></li>
+			<li><a href="del_user.php"><i class="fas fa-address-book"></i>Delete User</a></li>
             <li><a href="access.php?request=user"><i class="far fa-file-alt"></i> Access User Records</a></li>
-            <li><a href="transaction.php"><i class="fas fa-file-invoice-dollar"></i>Make a Transaction</a></li>
+            <li>
+            <form id = "my_form" action="adminUpload.php" method= "post">
+            <a name  =  "view" href="javascript:{}" onclick="document.getElementById('my_form').submit();"><i class = "fas fa-file-alt"></i>View Document</a>
+            <input type  ="hidden"  name = "view" value = "javascript:{}" />  
+            </form>
+            </li>
+            <li><a href="transaction.php"><i class="fas fa-file-invoice-dollar"></i>Update Fund</a></li>
             <li><a href="access.php?request=transaction"><i class="fas fa-file-invoice-dollar"></i>Transactions log</a></li>
+            <li>
+            <form id = "my_form1" action="admin.php" method= "post">
+            <a name  =  "logout" href="javascript:{}" onclick="document.getElementById('my_form1').submit();"><i class = "fas fa-sign-out-alt"></i>Log Out</a>
+            <input type  ="hidden"  name = "logout" value = "javascript:{}" />
+            </form>
+            </li>
         </ul> 
       </div>
     </div>
-	</div>
-<div class = "id">
+</div>
+
+<div class = "workarea mt-100 padding-top : 100px">
+    <div class = "item" style="padding-top: 1.5rem;">
+        <form action ="adminUpload.php" method= "post" enctype="multipart/form-data">Select Docs to Upload : 
+            <input type="file" name="fileToUpload[]" id="fileToUpload" multiple>
+            <button class="btn btn-primary" id="fileToUpload" name ="submit" type="submit">Document Upload</button>
+        </form>
+    </div>
+        <div class="item"  style="padding-top: 1.5rem;">
+            <div class="autocomplete" id="search1">
+            <form autocomplete="off" method="post" action="admin.php" >
+            <input id="myInput" type="text" name="viewuser" placeholder="Search User">
+                <button type="submit" class="btn1" name = "btn_search"><i class="fa fa-search fa-lg"></i></button>
+            </form>
+            </div>
+            
+    </div>
+</div>
+<div class = "jumbotron bg-light cc1 col-md-12" id = "displaytable1" >
+  <div class = "data1">
+      <?php
+          echo '<table width = "100%" border = "0" cellpadding = "6" cellspacing = "10">';                       
+          echo '<tr><th><h5>Admin Id </th><th>:    '.$row12["admin_id"].'</th></h5></th> </tr>';
+          echo '<tr><th><h5>Email Id </th><th>:    '.$row12["email_id"].'</th></h5></th> </tr>';
+          echo '<tr><th><h5>Name </th><th>:    '.$row12["name"].'</th></h5></th></tr>';
+          echo '<tr><th><h5>Contact </th><th>:    '.$row12["contact"].'</th></h5></th></tr>';
+          echo '<tr><th><h5>Office </th><th> :    '.$row12["office"].'</th></h5></th></tr>';
+          echo '</table>';
+          
+      ?>
+  </div>
+</div>
+<!--div class = "id">
 <div class ="pic"><h1><i class="fas fa-id-card fa-2x"></i></h1></div>
 <div class ="det"><h1>Logged In As </h1><p><?php echo $_SESSION["admin"]?></p></div>
 </div>
-<a class="button1" href="ad.php">Upload file</a>
-<a class="button2" href="ad.php">View file</a>
-  <form autocomplete="off" method="post" action="admin.php" >
+<!--a class="button1" href="adminUpload.php">Upload file</a-->
+<!--div class ="col" style="text-align: center">
+  <div class= "row" style="padding-top: 20px; margin-left:15%; margin-top: 1%;">
+                <form action ="adminUpload.php" method= "post" enctype="multipart/form-data">Select Files to Upload : 
+                <input type="file" name="fileToUpload[]" id="fileToUpload" multiple>
+                <button class="btn-primary btn-lg" id="fileToUpload" name ="submit" type="submit">Upload Files</button>
+              </div>
+            </form>
+            <form action="adminUpload.php" method= "post">
+              <div class ="row" style="padding-top: 20px; margin-left:43%; text-align: center;">
+                 <button class="btn-primary btn-lg" name="view" type="submit">View Files</button>
+                </form>
+              </div>
+                  </div>
+<!--a class="button2" href="ad.php">View file</a-->
+  <!--form autocomplete="off" method="post" action="admin.php" >
   <div class="autocomplete" id="search1">
     <input id="myInput" type="text" name="viewuser" placeholder="Search User">
       <button type="submit" class="btn" name = "btn_search"><i class="fa fa-search fa-lg"></i></button>
 	  </div>
-</form>
+</form--> 
 <script>
   document.getElementById("search1").style.display = "block";
 
 </script>
 <div class ="announcements">
-<div class="picture">
-<div class ="ball">
-<i class="fas fa-rupee-sign fa-5x"></i>
-</div>
-</div>
-<div class="head">
-<h>Recent transactions</h>
+  <div class="picture">
+    <div class ="ball">
+    <i class="fas fa-rupee-sign fa-4x"></i>
+    </div>
+  </div>
+  <div class="head">
+  <h>Recent Transactions</h>
 </div>
 <div class ="trans">
 <hr class ="line">
@@ -440,7 +164,6 @@ echo '</ol></marquee>'
 </div>
 </body>
 </html>
-
 <script>
 function autocomplete(inp, arr) {
   /*the autocomplete function takes two arguments,
@@ -558,7 +281,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($name)) {
     echo 'Name is empty';
   } else {
-	  $SESSION["username"] = $name;
+	  $SESSION["usern"] = $name;
 	  $search->execute(array($name));
 	  while($row = $search->fetch(PDO::FETCH_ASSOC)){
 		  $_SESSION["pass"]= $row["password"];
@@ -568,5 +291,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 }
 ?>
-
-

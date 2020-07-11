@@ -5,6 +5,6 @@ $_SESSION['pass'] = $_GET["pass"];
 ?>
 <html>
 <head>
-<meta http-equiv="refresh" content="0;URL=edituser.php">
+<meta http-equiv="refresh" content="0;URL=admin_edituser.php">
 </head>
 </html>

@@ -121,6 +121,7 @@
     text-align: center;
   }
   #displaytable{
+  margin-left: 400px;
   display:none;
   }
  #del{

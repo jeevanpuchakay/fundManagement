@@ -62,7 +62,7 @@
         $amount = $_POST['amount'];
         $user = $_POST['new_user_id'];
         $email = $_POST['new_email_id'];
-        if($tr_type == "Credit" && $user != ''){
+        if($tr_type == "Add Fund" && $user != ''){
             $data = ['user_id' => $user, 'amount' => $amount];
             $sql = $con->prepare('update user set left_balance = left_balance + :amount where user_id=:user_id');
             $status = $sql->execute($data);
@@ -83,7 +83,7 @@
             $type="Credited";
             
         }
-        else if ($tr_type == "Debit" && $user != ''){
+        else if ($tr_type == "Withdraw Fund" && $user != ''){
             $sql = $con->prepare('select left_balance from user where user_id= ?') ;
             $sql->execute(array($user));
             $loc = $sql->fetch(PDO::FETCH_ASSOC);
@@ -98,7 +98,7 @@
             $id1 = 0;
             $id1 = $id['m'];
             $data = ['trans_id' => $id1+1, 'credit' => "Debit", 'amount' => $amount];
-            $sql = $con->prepare('insert into transactions(trans_id, type, amount, date) values (:trans_id,:credit,:amount,NOW())');
+            $sql = $con->prepare('insert into transactions(trans_id, type, amount, date,purpose) values (:trans_id,:credit,:amount,NOW(),"online payment")');
             $sql->execute($data);
             $data = ['trans_id' => $id1+1, 'user_id' => $user];
             $sql = $con->prepare('insert into balance values(:user_id,:trans_id)');
@@ -131,7 +131,7 @@
             //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
             //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
             $mail->isHTML(true);   
-            $body="<h4>This is a computer generated mail.</h4><p>Your SB A/C is ".$type." for Rs. ".$amount." /- on ".date("Y/m/d")." by Transfer.</p>Available Balance is Rs. ".$left." /-. (UPI REFERENCE NO is : ".$user_id.").<br/>KKS<br/>Something<br/>Office Address<br/>CSE DEPARTMENT <br/> Indian Institute Of Technology INDORE.";
+            $body="<h4>This is a computer generated mail.</h4><p>Your account is ".$type." for Rs. ".$amount." /- on ".date("Y/m/d")." by Transfer.</p>Available Balance is Rs. ".$left." /-. (UPI REFERENCE NO is : ".$user_id.").<br/>KKS<br/>Something<br/>Office Address<br/>CSE DEPARTMENT <br/> Indian Institute Of Technology INDORE.";
             $Content="Your account has been ".$type." with Rs. ".$amount." /-. The Left Balance is Rs. ".$left." /-";
             $mail->Subject = 'Notification for Fund Credit/Debit';
             $mail->Body   = $body;
@@ -156,11 +156,41 @@
         <link href='//fonts.googleapis.com/css?family=RobotoDraft:regular,bold,italic,thin,light,bolditalic,black,medium&lang=en' rel='stylesheet'> 
     </head>
     <body>
-        <div class="container-fluid c0">
-            <div class="jumbotron f1">
-            <img class="img-responsive img" src="./assets/logo1.png" alt="">
-            </div>
-        <div>
+        
+    <div class="grid-container">
+  <div class="grid-item item1"><p><img src="./assets/logo.png" style = "max-width : 100%; " /></p></div>
+  <div class="grid-item item2"><h1>FUND MANAGEMENT SYSTEM</h1></div>
+  <div class="grid-item item3"><h1>CSE Department</h1><p>Admin Page</p></div>  
+</div>
+<div class="wrapper padding-top : 100px">
+    <div class="sidebar">
+        <h2 class="new_h1">Logged In As <p><?php echo $_SESSION["admin"]?></p></h2>
+        <ul>
+            <li><a href="admin.php"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="new_user.php"><i class="fas fa-user-plus"></i>Create User</a></li>
+			<li><a href="del_user.php"><i class="fas fa-address-book"></i>Delete User</a></li>
+            <li><a href="access.php?request=user"><i class="far fa-file-alt"></i> Access User Records</a></li>
+            <li>
+            <form id = "my_form" action="adminUpload.php" method= "post">
+            <a name  =  "view" href="javascript:{}" onclick="document.getElementById('my_form').submit();"><i class = "fas fa-file-alt"></i>View Document</a>
+            <input type  ="hidden"  name = "view" value = "javascript:{}" />  
+            </form>
+            </li>
+            <li><a href="transaction.php"><i class="fas fa-file-invoice-dollar"></i>Update Fund</a></li>
+            <li><a href="access.php?request=transaction"><i class="fas fa-file-invoice-dollar"></i>Transactions log</a></li>
+            <li>
+            <form id = "my_form1" action="admin.php" method= "post">
+            <a name  =  "logout" href="javascript:{}" onclick="document.getElementById('my_form1').submit();"><i class = "fas fa-sign-out-alt"></i>Log Out</a>
+            <input type  ="hidden"  name = "logout" value = "javascript:{}" />
+            </form>
+            </li>
+        </ul> 
+      </div>
+    </div>
+</div>
+
+
+
         <div class = "container main">
             <div class = "mt-2 container prime1 border border-secondary" style = "padding-top : 0.5%; padding-bottom : 0.5%; border-radius: 8px">
                 <div class="row">
@@ -270,8 +300,8 @@
                     </div>
                     <div class= 'col-md-2' style= 'padding-top:0.0%; padding-left:2%'>
                         <select class="form-control" name="tr_type">
-                            <option>Credit</option>
-                            <option>Debit</option>
+                            <option>Add Fund</option>
+                            <option>Withdraw Fund</option>
                         </select>
                     </div>
                     
